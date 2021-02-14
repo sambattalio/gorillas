@@ -29,38 +29,38 @@ DO:
 LOOP WHILE INKEY$ <> "q"
 
 
-Launch_Banana:
-old_x = 80
-old_y = 100
-x = old_x
-y = old_y
-dy = y_component(angle, velocity)
-dx = x_component(angle, velocity)
+SUB Launch_Banana
+    old_x = 80
+    old_y = 100
+    x = old_x
+    y = old_y
+    dy = y_component(angle, velocity)
+    dx = x_component(angle, velocity)
 
 
-DO
-    ' clear  old banana
-    PUT (old_x, old_y), banana%(), XOR
+    DO
+        ' clear  old banana
+        PUT (old_x, old_y), banana%(), XOR
 
-    x = x + dx
-    y = y + dy
+        x = x + dx
+        y = y + dy
 
-    old_x = x
-    old_y = y
+        old_x = x
+        old_y = y
 
-    dy = dy + y_grav
+        dy = dy + y_grav
 
 
-    IF x > x_max OR x < 0 OR y > y_max OR y < 0 THEN EXIT DO
-    ' new banan
-    PUT (x, y), banana%(), XOR
+        IF x > x_max OR x < 0 OR y > y_max OR y < 0 THEN EXIT DO
+        ' new banan
+        PUT (x, y), banana%(), XOR
 
-    ' delay a bit
-    Delay_Framerate
+        ' delay a bit
+        Delay_Framerate
 
-LOOP WHILE old_x < x_max AND old_y < y_max AND old_x > 0 AND old_y > 0
+    LOOP WHILE old_x < x_max AND old_y < y_max AND old_x > 0 AND old_y > 0
 
-RETURN
+END SUB
 
 ' shamelessly from https://balau82.wordpress.com/2015/01/18/nostalgia-trip-qbasic-game-programming/
 SUB Delay_Framerate
