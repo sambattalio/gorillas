@@ -25,7 +25,7 @@ CLS: PAINT (160, 100), 100
 
 DO:
     LOCATE 1, 8: INPUT angle: LOCATE 2, 8: INPUT velocity
-    GOSUB Launch_Banana
+    Launch_Banana
 LOOP WHILE INKEY$ <> "q"
 
 
