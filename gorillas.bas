@@ -25,42 +25,43 @@ CLS: PAINT (160, 100), 100
 
 DO:
     LOCATE 1, 8: INPUT angle: LOCATE 2, 8: INPUT velocity
-    Launch_Banana
+    GOSUB Launch_Banana
 LOOP WHILE INKEY$ <> "q"
 
 
-SUB Launch_Banana
-    old_x = 80
-    old_y = 100
-    x = old_x
-    y = old_y
-    dy = y_component(angle, velocity)
-    dx = x_component(angle, velocity)
+Launch_Banana:
+old_x = 80
+old_y = 100
+x = old_x
+y = old_y
+dy = y_component(angle, velocity)
+dx = x_component(angle, velocity)
+
+PUT (old_x, old_y), banana%(), XOR
+
+DO
+    ' clear  old banana
+    PUT (old_x, old_y), banana%(), XOR
+
+    x = x + dx
+    y = y + dy
+
+    old_x = x
+    old_y = y
+
+    dy = dy + y_grav
 
 
-    DO
-        ' clear  old banana
-        PUT (old_x, old_y), banana%(), XOR
+    IF x > x_max OR x < 0 OR y > y_max OR y < 0 THEN EXIT DO
+    ' new banan
+    PUT (x, y), banana%(), XOR
 
-        x = x + dx
-        y = y + dy
+    ' delay a bit
+    Delay_Framerate
 
-        old_x = x
-        old_y = y
+LOOP WHILE old_x < x_max AND old_y < y_max AND old_x > 0 AND old_y > 0
 
-        dy = dy + y_grav
-
-
-        IF x > x_max OR x < 0 OR y > y_max OR y < 0 THEN EXIT DO
-        ' new banan
-        PUT (x, y), banana%(), XOR
-
-        ' delay a bit
-        Delay_Framerate
-
-    LOOP WHILE old_x < x_max AND old_y < y_max AND old_x > 0 AND old_y > 0
-
-END SUB
+RETURN
 
 ' shamelessly from https://balau82.wordpress.com/2015/01/18/nostalgia-trip-qbasic-game-programming/
 SUB Delay_Framerate
