@@ -24,23 +24,42 @@ Circle (4, 3), 4, 4
 Paint (4, 3), 12, 4
 Dim testObj%(37)
 Get (0, 0)-(8, 7), testObj%()
+
+' Monkey box (until sprite replaces)
+Line (60, 60)-(80, 80), 15, BF
+Dim monkey%(400)
+Get (60, 60)-(80, 80), monkey%()
+
 Cls: Paint (160, 100), 100
 
-Put (50, 100), testObj%(), Xor
+' monkey spawning
+rilla_y = 100
+rilla_w = 20
+rilla_h = rilla_w
+Put (40, 100), monkey%()
+Put (240, 100), monkey%()
+
+shooter = -1 ' -1 is true for some reason
+
 Do:
     Locate 1, 8: Input angle: Locate 2, 8: Input velocity
-
     GoSub Launch_Banana
+    shooter = Not shooter
 Loop While InKey$ <> "q"
 
 
 Launch_Banana:
 old_x = 80
+If shooter Then old_x = 40 Else old_x = 240
 old_y = 100
 x = old_x
 y = old_y
-dy = y_component(angle, velocity)
-dx = x_component(angle, velocity)
+multiplier = 1
+' attempt to normalize angle to point towards other rilla
+If shooter Then multiplier = 180 Else multiplier = 0
+Print multiplier
+dy = y_component(angle + multiplier, velocity)
+dx = x_component(angle + multiplier, velocity)
 
 Put (old_x, old_y), banana%(), Xor
 
@@ -57,16 +76,18 @@ Do
     dy = dy + y_grav
 
 
-    If x > x_max Or x < 0 Or y > y_max Or y < 0 Then Exit Do
+    If x + 4 > x_max Or x < 0 Or y + 4 > y_max Or y < 0 Then Exit Do
     ' new banan
     Put (x, y), banana%(), Xor
 
-    ' Check collision
-    Locate 3, 8: Print is_collision(x, x + 4, y, y + 3, 50, 50 + 4, 100, 100 + 3)
+    ' Check collision (with non shooting gorilla)
+    rilla_x = 0
+    If shooter Then rilla_x = 240 Else rilla_x = 40
+    Locate 3, 8: Print is_collision(x, x + 4, y, y + 3, rilla_x, rilla_x + rilla_w, rilla_y, rilla_y + rilla_h)
 
     ' delay a bit
     Delay_Framerate
-Loop While old_x < x_max And old_y < y_max And old_x > 0 And old_y > 0
+Loop While old_x + 4 < x_max And old_y + 4 < y_max And old_x > 0 And old_y > 0
 
 Return
 
