@@ -32,6 +32,8 @@ Get (60, 60)-(80, 80), monkey%()
 
 Cls: Paint (160, 100), 100
 
+' test banana
+
 ' monkey spawning
 rilla_y = 100
 rilla_w = 20
@@ -40,14 +42,21 @@ Put (40, 100), monkey%()
 Put (240, 100), monkey%()
 
 shooter = -1 ' -1 is true for some reason
+player1_score = 0
+player2_score = 0
 
+' MAIN GAME LOOP
 Do:
+    Locate 1, 1: Print player1_score: Locate 1, 38: Print player2_score
     Locate 1, 8: Input angle: Locate 2, 8: Input velocity
+
+    angle = angle * 3.14159 / 180
     GoSub Launch_Banana
     shooter = Not shooter
 Loop While InKey$ <> "q"
 
 
+' LAUNCH SUBROUTINE
 Launch_Banana:
 old_x = 80
 If shooter Then old_x = 40 Else old_x = 240
@@ -56,8 +65,7 @@ x = old_x
 y = old_y
 multiplier = 1
 ' attempt to normalize angle to point towards other rilla
-If shooter Then multiplier = 180 Else multiplier = 0
-Print multiplier
+If shooter Then multiplier = 0 Else multiplier = 3.14159
 dy = y_component(angle + multiplier, velocity)
 dx = x_component(angle + multiplier, velocity)
 
@@ -76,14 +84,18 @@ Do
     dy = dy + y_grav
 
 
-    If x + 4 > x_max Or x < 0 Or y + 4 > y_max Or y < 0 Then Exit Do
+    If x + 4 + 2 > x_max Or x < 0 Or y + 4 + 2 > y_max Or y < 0 Then Exit Do
     ' new banan
     Put (x, y), banana%(), Xor
 
     ' Check collision (with non shooting gorilla)
     rilla_x = 0
     If shooter Then rilla_x = 240 Else rilla_x = 40
-    Locate 3, 8: Print is_collision(x, x + 4, y, y + 3, rilla_x, rilla_x + rilla_w, rilla_y, rilla_y + rilla_h)
+    ' Check if it hit the opposing player and if so update the score accordingly
+    If is_collision(x, x + 4, y, y + 3, rilla_x, rilla_x + rilla_w, rilla_y, rilla_y + rilla_h) Then
+        If shooter Then player1_score = player1_score + 1 Else player2_score = player2_score + 1
+        Return
+    End If
 
     ' delay a bit
     Delay_Framerate
@@ -103,6 +115,7 @@ Sub Delay_Framerate
     lasttimer = Timer
 End Sub
 
+' Helper functions
 Function x_component (angle, vel)
     x_component = Cos(angle) * vel
 End Function
