@@ -1,14 +1,14 @@
 ' Monkey Type Game
 
 ' Setup Screen and graphics
-Screen 13: Cls
-Cls: Paint (160, 100), 100
+SCREEN 13: CLS
+CLS: PAINT (160, 100), 100
 
-Const x_max = 320
-Const y_max = 200
+CONST x_max = 320
+CONST y_max = 200
 
 ' TODO: make this adjustable
-Const y_grav = 1
+CONST y_grav = 1
 ' wind is another TODO
 
 ' User defined values
@@ -16,7 +16,7 @@ velocity = 0
 angle = 0
 
 ' Creating standin banana sprite in program (we can load in sprites in future)
-Cls
+CLS
 'attempting to put in background
 
 
@@ -25,45 +25,60 @@ Cls
 
 GORILLAW = 32 'Sprite width
 GORILLAH = 32 'Sprite height
-For Y = 1 To GORILLAH ' For each row; image height
-    For X = 1 To GORILLAW ' For each column; image width
-        Read DotColor
-        If DotColor <> 15 Then 'We can then use this IF-THEN statement to
-            PSet (X, Y), DotColor 'make COLOR 00 as a transparent color.
-        End If
-    Next X:
-Next Y
+FOR Y = 1 TO GORILLAH ' For each row; image height
+    FOR X = 1 TO GORILLAW ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X:
+NEXT Y
 
-Dim monkey%(GORILLAW * GORILLAH)
-Get (1, 1)-(GORILLAW, GORILLAH), monkey%()
-Cls
+DIM monkey%(GORILLAW * GORILLAH)
+GET (1, 1)-(GORILLAW, GORILLAH), monkey%()
+CLS
 
 '$INCLUDE: 'BANANA.QBD'
 BANANAW = 8
 BANANAH = 8
-Cls
-For Y = 1 To BANANAW ' For each row; image height
-    For X = 1 To BANANAH ' For each column; image width
-        Read DotColor
-        If DotColor <> 15 Then 'We can then use this IF-THEN statement to
-            PSet (X, Y), DotColor 'make COLOR 00 as a transparent color.
-        End If
-    Next X
-Next Y
+CLS
+FOR Y = 1 TO BANANAW ' For each row; image height
+    FOR X = 1 TO BANANAH ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X
+NEXT Y
 
-Dim banana%(BANANAH * BANANAW)
-Get (1, 1)-(BANANAW, BANANAH), banana%()
+DIM banana%(BANANAH * BANANAW)
+GET (1, 1)-(BANANAW, BANANAH), banana%()
 
-Cls
+'$INCLUDE: 'BANANA_9.QBD'
+CLS
+FOR Y = 1 TO BANANAW ' For each row; image height
+    FOR X = 1 TO BANANAH ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X
+NEXT Y
+
+DIM rotated_banana%(BANANAH * BANANAW)
+GET (1, 1)-(BANANAW, BANANAH), rotated_banana%()
+
+
+CLS
 '$INCLUDE: 'BACKGROU.QBD'
-For Y = 1 To 200 ' For each row; image height
-    For X = 1 To 320 ' For each column; image width
-        Read DotColor
-        If DotColor <> 15 Then 'We can then use this IF-THEN statement to
-            PSet (X, Y), DotColor 'make COLOR 00 as a transparent color.
-        End If
-    Next X
-Next Y
+FOR Y = 1 TO 200 ' For each row; image height
+    FOR X = 1 TO 320 ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X
+NEXT Y
 
 
 ' test banana
@@ -79,44 +94,44 @@ rilla1_y = 62
 rilla2_x = 225
 rilla2_y = 90
 
-Put (rilla1_x, rilla1_y), monkey%()
-Put (rilla2_x, rilla2_y), monkey%()
+PUT (rilla1_x, rilla1_y), monkey%()
+PUT (rilla2_x, rilla2_y), monkey%()
 
 shooter = -1 ' -1 is true for some reason
 player1_score = 0
 player2_score = 0
 
 ' MAIN GAME LOOP
-Do:
-    Locate 1, 1: Print player1_score: Locate 1, 38: Print player2_score
-    Locate 1, 8: Input angle: Locate 2, 8: Input velocity
+DO:
+    LOCATE 1, 1: PRINT player1_score: LOCATE 1, 38: PRINT player2_score
+    LOCATE 1, 8: INPUT angle: LOCATE 2, 8: INPUT velocity
 
     angle = angle * 3.14159 / 180
-    GoSub Launch_Banana
-    shooter = Not shooter
-Loop While InKey$ <> "q"
+    GOSUB Launch_Banana
+    shooter = NOT shooter
+LOOP WHILE INKEY$ <> "q"
 
 
 ' LAUNCH SUBROUTINE
 Launch_Banana:
 old_x = 80
-If shooter Then old_x = rilla1_x Else old_x = rilla2_x
+IF shooter THEN old_x = rilla1_x ELSE old_x = rilla2_x
 old_y = 100
-If shooter Then old_y = rilla1_y Else old_y = rilla2_y
+IF shooter THEN old_y = rilla1_y ELSE old_y = rilla2_y
 X = old_x
 Y = old_y
 multiplier = 1
 ' attempt to normalize angle to point towards other rilla
-If shooter Then multiplier = 0 Else multiplier = 3.14159
+IF shooter THEN multiplier = 0 ELSE multiplier = 3.14159
 dy = y_component(angle + multiplier, velocity)
 dx = x_component(angle + multiplier, velocity)
 
-Put (old_x, old_y), banana%(), Xor
-
-Do
+PUT (old_x, old_y), rotated_banana%(), XOR
+PUT (old_x, old_y), banana%(), XOR
+DO
     ' clear  old banana
-    Put (old_x, old_y), banana%(), Xor
-
+    PUT (old_x, old_y), banana%(), XOR
+    PUT (old_x, old_y), rotated_banana%(), XOR
     X = X + dx
     Y = Y + dy
 
@@ -126,59 +141,62 @@ Do
     dy = dy + y_grav
 
 
-    If X + 4 + 2 > x_max Or X < 0 Or Y + 4 + 2 > y_max Or Y < 0 Then Exit Do
+    IF X + 4 + 2 > x_max OR X < 0 OR Y + 4 + 2 > y_max OR Y < 0 THEN EXIT DO
     ' new banan
-    Put (X, Y), banana%(), Xor
+    PUT (X, Y), banana%(), XOR
+    Delay_Framerate
+    'PUT (old_x - dx, old_y - dy - y_grav), banana%(), XOR
+    PUT (X, Y), rotated_banana%(), XOR
 
     ' Check collision (with non shooting gorilla)
     rilla_x = 0
-    If shooter Then rilla_x = rilla2_x Else rilla_x = rilla1_x
-    if shooter then rilla_y = rilla2_y Else rilla_y = rilla1_y
+    IF shooter THEN rilla_x = rilla2_x ELSE rilla_x = rilla1_x
+    IF shooter THEN rilla_y = rilla2_y ELSE rilla_y = rilla1_y
     ' Check if it hit the opposing player and if so update the score accordingly
-    If is_collision(X, X + BANANAW, Y, Y + BANANAH, rilla_x, rilla_x + rilla_w, rilla_y, rilla_y + rilla_h) Then
-        If shooter Then player1_score = player1_score + 1 Else player2_score = player2_score + 1
-        Return
-    End If
+    IF is_collision(X, X + BANANAW, Y, Y + BANANAH, rilla_x, rilla_x + rilla_w, rilla_y, rilla_y + rilla_h) THEN
+        IF shooter THEN player1_score = player1_score + 1 ELSE player2_score = player2_score + 1
+        RETURN
+    END IF
 
     ' add collision detection of buildings
     ' first one is 30x80 on bottom left
-    If is_collision(X, X + BANANAW, Y, Y + BANANAH, 0, 30, y_max - 80, y_max) Then
-        Return
-    End If
+    IF is_collision(X, X + BANANAW, Y, Y + BANANAH, 0, 30, y_max - 80, y_max) THEN
+        RETURN
+    END IF
 
-    If is_collision(X, X + BANANAW, Y, Y + BANANAH, 31, 90, y_max - 107, y_max) Then
-        Return
-    End If
+    IF is_collision(X, X + BANANAW, Y, Y + BANANAH, 31, 90, y_max - 107, y_max) THEN
+        RETURN
+    END IF
 
-    If is_collision(X, X + BANANAW, Y, Y + BANANAH, 91, 120, y_max - 77, y_max) Then
-        Return
-    End If
+    IF is_collision(X, X + BANANAW, Y, Y + BANANAH, 91, 120, y_max - 77, y_max) THEN
+        RETURN
+    END IF
 
-    If is_collision(X, X + BANANAW, Y, Y + BANANAH, 121, 150, y_max - 115, y_max) Then
-        Return
-    End If
+    IF is_collision(X, X + BANANAW, Y, Y + BANANAH, 121, 150, y_max - 115, y_max) THEN
+        RETURN
+    END IF
 
-    If is_collision(X, X + BANANAW, Y, Y + BANANAH, 151, 180, y_max - 125, y_max) Then
-        Return
-    End If
+    IF is_collision(X, X + BANANAW, Y, Y + BANANAH, 151, 180, y_max - 125, y_max) THEN
+        RETURN
+    END IF
 
-    If is_collision(X, X + BANANAW, Y, Y + BANANAH, 181, 210, y_max - 84, y_max) Then
-        Return
-    End If
+    IF is_collision(X, X + BANANAW, Y, Y + BANANAH, 181, 210, y_max - 84, y_max) THEN
+        RETURN
+    END IF
 
-    If is_collision(X, X + BANANAW, Y, Y + BANANAH, 211, 240, y_max - 80, y_max) Then
-        Return
-    End If
-
-
-    If is_collision(X, X + BANANAW, Y, Y + BANANAH, 241, 270, y_max - 90, y_max) Then
-        Return
-    End If
+    IF is_collision(X, X + BANANAW, Y, Y + BANANAH, 211, 240, y_max - 80, y_max) THEN
+        RETURN
+    END IF
 
 
-    If is_collision(X, X + BANANAW, Y, Y + BANANAH, 271, x_max, y_max - 103, y_max) Then
-        Return
-    End If
+    IF is_collision(X, X + BANANAW, Y, Y + BANANAH, 241, 270, y_max - 90, y_max) THEN
+        RETURN
+    END IF
+
+
+    IF is_collision(X, X + BANANAW, Y, Y + BANANAH, 271, x_max, y_max - 103, y_max) THEN
+        RETURN
+    END IF
 
 
 
@@ -190,32 +208,32 @@ Do
 
     ' delay a bit
     Delay_Framerate
-Loop While old_x + 4 < x_max And old_y + 4 < y_max And old_x > 0 And old_y > 0
+LOOP WHILE old_x + 4 < x_max AND old_y + 4 < y_max AND old_x > 0 AND old_y > 0
 
-Return
+RETURN
 
 ' shamelessly from https://balau82.wordpress.com/2015/01/18/nostalgia-trip-qbasic-game-programming/
-Sub Delay_Framerate
-    Static lasttimer As Single 'The value is retained between calls.
-    Dim nexttimer As Single
-    Dim maxfps As Single
+SUB Delay_Framerate
+    STATIC lasttimer AS SINGLE 'The value is retained between calls.
+    DIM nexttimer AS SINGLE
+    DIM maxfps AS SINGLE
     maxfps = 10
     nexttimer = lasttimer + 1! / maxfps
-    Do While Timer < nexttimer
-    Loop
-    lasttimer = Timer
-End Sub
+    DO WHILE TIMER < nexttimer
+    LOOP
+    lasttimer = TIMER
+END SUB
 
 ' Helper functions
-Function x_component (angle, vel)
-    x_component = Cos(angle) * vel
-End Function
+FUNCTION x_component (angle, vel)
+    x_component = COS(angle) * vel
+END FUNCTION
 
-Function y_component (angle, vel)
-    y_component = Sin(angle) * vel
-End Function
+FUNCTION y_component (angle, vel)
+    y_component = SIN(angle) * vel
+END FUNCTION
 
 ' Rectangle bounding box collision detection
-Function is_collision (x1, x2, y1, y2, xx1, xx2, yy1, yy2)
-    is_collision = Not (yy2 < y1 Or yy1 > y2 Or xx2 < x1 Or xx1 > x2)
-End Function
+FUNCTION is_collision (x1, x2, y1, y2, xx1, xx2, yy1, yy2)
+    is_collision = NOT (yy2 < y1 OR yy1 > y2 OR xx2 < x1 OR xx1 > x2)
+END FUNCTION
