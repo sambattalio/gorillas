@@ -50,7 +50,7 @@ FOR Y = 1 TO BANANAW ' For each row; image height
     NEXT X
 NEXT Y
 
-DIM banana%(BANANAH * BANANAW)
+DIM banana%(135)
 GET (1, 1)-(BANANAW, BANANAH), banana%()
 
 '$INCLUDE: 'BANANA_9.QBD'
@@ -64,11 +64,38 @@ FOR Y = 1 TO BANANAW ' For each row; image height
     NEXT X
 NEXT Y
 
-DIM rotated_banana%(BANANAH * BANANAW)
-GET (1, 1)-(BANANAW, BANANAH), rotated_banana%()
-
-
+GET (1, 1)-(BANANAW, BANANAH), banana%(34)
 CLS
+
+'$INCLUDE: 'BANANA_1.QBD'
+CLS
+FOR Y = 1 TO BANANAW ' For each row; image height
+    FOR X = 1 TO BANANAH ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X
+NEXT Y
+
+GET (1, 1)-(BANANAW, BANANAH), banana%(68)
+CLS
+
+'$INCLUDE: 'BANANA_2.QBD'
+CLS
+FOR Y = 1 TO BANANAW ' For each row; image height
+    FOR X = 1 TO BANANAH ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X
+NEXT Y
+
+GET (1, 1)-(BANANAW, BANANAH), banana%(102)
+CLS
+
+
 '$INCLUDE: 'BACKGROU.QBD'
 FOR Y = 1 TO 200 ' For each row; image height
     FOR X = 1 TO 320 ' For each column; image width
@@ -119,7 +146,6 @@ DO:
 
 LOOP WHILE INKEY$ <> "q"
 
-
 ' LAUNCH SUBROUTINE
 Launch_Banana:
 old_x = 80
@@ -135,12 +161,16 @@ dy = y_component(angle + multiplier, velocity)
 dx = x_component(angle + multiplier, velocity)
 
 PUT (old_x, old_y), banana%(), XOR
-PUT (old_x, old_y), rotated_banana%(), XOR
+PUT (old_x, old_y), banana%(34), XOR
+PUT (old_x, old_y), banana%(68), XOR
+PUT (old_x, old_y), banana%(102), XOR
 
 DO
     ' clear  old banana
     PUT (old_x, old_y), banana%(), XOR
-    PUT (old_x, old_y), rotated_banana%(), XOR
+    PUT (old_x, old_y), banana%(34), XOR
+    PUT (old_x, old_y), banana%(68), XOR
+    PUT (old_x, old_y), banana%(102), XOR
 
     X = X + dx
     Y = Y + dy
@@ -150,13 +180,12 @@ DO
 
     dy = dy + y_grav
 
-
     IF X + 4 + 2 > x_max OR X < 0 OR Y + 4 + 2 > y_max OR Y < 0 THEN EXIT DO
     ' new banana
-    Delay_Framerate
-    PUT (X, Y), banana%(), XOR
-    Delay_Framerate
-    PUT (X, Y), rotated_banana%(), XOR
+    FOR spritenum% = 0 TO 3
+        Delay_Framerate
+        PUT (X, Y), banana%(spritenum% * 34), XOR
+    NEXT spritenum%
 
     ' Check collision (with non shooting gorilla)
     rilla_x = 0
@@ -262,6 +291,7 @@ DO:
         Delay_Framerate
     NEXT spritenum%
 LOOP WHILE INKEY$ <> "q"
+SYSTEM 1
 RETURN
 
 ' shamelessly from https://balau82.wordpress.com/2015/01/18/nostalgia-trip-qbasic-game-programming/
