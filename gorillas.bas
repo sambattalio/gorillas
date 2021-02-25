@@ -7,30 +7,30 @@ CLS: PAINT (160, 100), 100
 CONST x_max = 320
 CONST y_max = 200
 
-Const y_grav = 1
-Const MAX_HITBOXES = 420
+CONST y_grav = 1
+CONST MAX_HITBOXES = 420
 wind = 0
 
 ' Create initial hitboxes for buildings
-Type hitbox_bounds
-    x1 As Integer
-    x2 As Integer
-    y1 As Integer
-    y2 As Integer
-End Type
-Common num_hitboxes As Integer
+TYPE hitbox_bounds
+    x1 AS INTEGER
+    x2 AS INTEGER
+    y1 AS INTEGER
+    y2 AS INTEGER
+END TYPE
+COMMON num_hitboxes AS INTEGER
 num_hitboxes = 9
-Dim building_bounds(MAX_HITBOXES) As hitbox_bounds
+DIM building_bounds(MAX_HITBOXES) AS hitbox_bounds
 
 ' UGLY CODE don't look
-Dim building1 As hitbox_bounds
+DIM building1 AS hitbox_bounds
 building1.x1 = 0
 building1.x2 = 32
 building1.y1 = y_max - 80
 building1.y2 = y_max
 building_bounds(1) = building1
  
-Dim building2 As hitbox_bounds
+DIM building2 AS hitbox_bounds
 building2.x1 = 33
 building2.x2 = 95
 building2.y1 = y_max - 107
@@ -38,49 +38,49 @@ building2.y2 = y_max
 building_bounds(2) = building2
 
 
-Dim building3 As hitbox_bounds
+DIM building3 AS hitbox_bounds
 building3.x1 = 96
 building3.x2 = 131
 building3.y1 = y_max - 77
 building3.y2 = y_max
 building_bounds(3) = building3
 
-Dim building4 As hitbox_bounds
+DIM building4 AS hitbox_bounds
 building4.x1 = 132
 building4.x2 = 162
 building4.y1 = y_max - 115
 building4.y2 = y_max
 building_bounds(4) = building4
 
-Dim building5 As hitbox_bounds
+DIM building5 AS hitbox_bounds
 building5.x1 = 163
 building5.x2 = 196
 building5.y1 = y_max - 125
 building5.y2 = y_max
 building_bounds(5) = building5
 
-Dim building6 As hitbox_bounds
+DIM building6 AS hitbox_bounds
 building6.x1 = 197
 building6.x2 = 227
 building6.y1 = y_max - 84
 building6.y2 = y_max
 building_bounds(6) = building6
 
-Dim building7 As hitbox_bounds
+DIM building7 AS hitbox_bounds
 building7.x1 = 228
 building7.x2 = 261
 building7.y1 = y_max - 80
 building7.y2 = y_max
 building_bounds(7) = building7
 
-Dim building8 As hitbox_bounds
+DIM building8 AS hitbox_bounds
 building8.x1 = 262
 building8.x2 = 295
 building8.y1 = y_max - 90
 building8.y2 = y_max
 building_bounds(8) = building8
 
-Dim building9 As hitbox_bounds
+DIM building9 AS hitbox_bounds
 building9.x1 = 296
 building9.x2 = x_max
 building9.y1 = y_max - 103
@@ -202,14 +202,14 @@ PUT (rilla2_x, rilla2_y), monkey%()
 shooter = -1 ' -1 is true for some reason
 player1_score = 0
 player2_score = 0
-Randomize Timer
+RANDOMIZE TIMER
 ' MAIN GAME LOOP
-Do:
-    Locate 1, 1: Print player1_score: Locate 1, 38: Print player2_score
-    wind = Int(Rnd * 7) - 3
-    Locate 1, 25: Print "Wind: ": Locate 1, 29: Print wind
-    Locate 1, 8: Print "Angle: ": Locate 2, 8: Print "Velocity: "
-    Locate 1, 17: Input angle: Locate 2, 17: Input velocity
+DO:
+    LOCATE 1, 1: PRINT player1_score: LOCATE 1, 38: PRINT player2_score
+    wind = INT(RND * 7) - 3
+    LOCATE 1, 25: PRINT "Wind: ": LOCATE 1, 29: PRINT wind
+    LOCATE 1, 8: PRINT "Angle: ": LOCATE 2, 8: PRINT "Velocity: "
+    LOCATE 1, 17: INPUT angle: LOCATE 2, 17: INPUT velocity
 
 
     angle = angle * 3.14159 / 180
@@ -220,7 +220,7 @@ Do:
 
     IF player1_score = 3 THEN
         GOSUB Monkey_Dance
-    ELSEIF player2_score = 1 THEN
+    ELSEIF player2_score = 3 THEN
         GOSUB Monkey_Dance
     END IF
 
@@ -237,13 +237,13 @@ Y = old_y
 multiplier = 1
 addition = 1
 ' attempt to normalize angle to point towards other rilla
-If shooter Then
+IF shooter THEN
     multiplier = -1
     addition = 0
-Else
+ELSE
     multiplier = 1
     addition = 3.14159
-End If
+END IF
 dy = y_component(multiplier * (angle + addition), velocity)
 dx = x_component(multiplier * (angle + addition), velocity)
 
@@ -285,20 +285,20 @@ DO
     END IF
 
 
-    For I = 1 To num_hitboxes
-        If is_collision(X, X + BANANAW, Y, Y + BANANAH, building_bounds(I).x1, building_bounds(I).x2, building_bounds(I).y1, building_bounds(I).y2) Then
+    FOR I = 1 TO num_hitboxes
+        IF is_collision(X, X + BANANAW, Y, Y + BANANAH, building_bounds(I).x1, building_bounds(I).x2, building_bounds(I).y1, building_bounds(I).y2) THEN
             ' BOOM make hitbox for banan
-            Dim banana_hitbox As hitbox_bounds
+            DIM banana_hitbox AS hitbox_bounds
             banana_hitbox.x1 = X
             banana_hitbox.x2 = X + BANANAW
             banana_hitbox.y1 = Y
             banana_hitbox.y2 = Y + BANANAH
             num_hitboxes = explode_hitboxes(building_bounds(), I, banana_hitbox, num_hitboxes)
             ' clean last banana?
-            LINE(X, Y)-(X+BANANAW, Y+BANANAH), 0, BF
-            Return
-        End If
-    Next I
+            LINE (X, Y)-(X + BANANAW, Y + BANANAH), 0, BF
+            RETURN
+        END IF
+    NEXT I
 
 
 
@@ -352,12 +352,12 @@ LOOP WHILE INKEY$ <> "q"
 SYSTEM 1
 RETURN
 
-Function explode_hitboxes (hitbox_array() As hitbox_bounds, building_i, banana_hitbox As hitbox_bounds, num_hitboxes)
+FUNCTION explode_hitboxes (hitbox_array() AS hitbox_bounds, building_i, banana_hitbox AS hitbox_bounds, num_hitboxes)
     ' Case 1, on left edge of building
     ' cut off rectangle from banana up on left hash and
     ' form 2 new hitboxes for building
-    Dim new_box As hitbox_bounds
-    If banana_hitbox.x1 < hitbox_array(building_i).x1 Then
+    DIM new_box AS hitbox_bounds
+    IF banana_hitbox.x1 < hitbox_array(building_i).x1 THEN
         y2_divot = max(banana_hitbox.y2, hitbox_array(building_i).y1 + (banana_hitbox.y2 - banana_hitbox.y1))
         x2_divot = hitbox_array(building_i).x1 + (banana_hitbox.x2 - banana_hitbox.x1)
 
@@ -371,12 +371,12 @@ Function explode_hitboxes (hitbox_array() As hitbox_bounds, building_i, banana_h
         new_box.y2 = hitbox_array(building_i).y2
         num_hitboxes = num_hitboxes + 1
         hitbox_array(num_hitboxes) = new_box
-        Line (new_box.x1, hitbox_array(building_i).y1)-(new_box.x2, new_box.y1), 0, BF
+        LINE (new_box.x1, hitbox_array(building_i).y1)-(new_box.x2, new_box.y1), 0, BF
         explode_hitboxes = num_hitboxes
-        Exit Function
-    End If
+        EXIT FUNCTION
+    END IF
     ' Case 2, right edge
-    If banana_hitbox.x2 > hitbox_array(building_i).x2 Then
+    IF banana_hitbox.x2 > hitbox_array(building_i).x2 THEN
         y2_divot = max(banana_hitbox.y2, hitbox_array(building_i).y1 + (banana_hitbox.y2 - banana_hitbox.y1))
         x2_divot = hitbox_array(building_i).x2 - (banana_hitbox.x2 - banana_hitbox.x1)
 
@@ -390,12 +390,12 @@ Function explode_hitboxes (hitbox_array() As hitbox_bounds, building_i, banana_h
         new_box.y2 = hitbox_array(building_i).y2
         num_hitboxes = num_hitboxes + 1
         hitbox_array(num_hitboxes) = new_box
-        Line (new_box.x1, hitbox_array(building_i).y1)-(new_box.x2, new_box.y1), 0, BF
+        LINE (new_box.x1, hitbox_array(building_i).y1)-(new_box.x2, new_box.y1), 0, BF
         explode_hitboxes = num_hitboxes
-        Exit Function
-    End If
+        EXIT FUNCTION
+    END IF
     ' Case 3, in da middle ,split into 3 rectangles and just yeet a rect out the middle bits
-    If banana_hitbox.x1 > hitbox_array(building_i).x1 And banana_hitbox.x2 < hitbox_array(building_i).x2 Then
+    IF banana_hitbox.x1 > hitbox_array(building_i).x1 AND banana_hitbox.x2 < hitbox_array(building_i).x2 THEN
         y2_divot = hitbox_array(building_i).y1 + (banana_hitbox.y2 - banana_hitbox.y1)
         x1_divot = banana_hitbox.x1
         x2_divot = banana_hitbox.x2
@@ -411,7 +411,7 @@ Function explode_hitboxes (hitbox_array() As hitbox_bounds, building_i, banana_h
         new_box.y2 = y2_divot
 
         ' right hitbox
-        Dim new_box2 As hitbox_bounds
+        DIM new_box2 AS hitbox_bounds
         new_box2.x1 = x2_divot + 1
         new_box2.x2 = hitbox_array(building_i).x2
         new_box2.y1 = y1_divot
@@ -423,11 +423,11 @@ Function explode_hitboxes (hitbox_array() As hitbox_bounds, building_i, banana_h
  
         num_hitboxes = num_hitboxes + 1
         hitbox_array(num_hitboxes) = new_box2
-        Line (x1_divot, y1_divot)-(x2_divot, y2_divot), 0, BF
+        LINE (x1_divot, y1_divot)-(x2_divot, y2_divot), 0, BF
         explode_hitboxes = num_hitboxes
-        Exit Function
-    End If
-End Function
+        EXIT FUNCTION
+    END IF
+END FUNCTION
 
 ' shamelessly from https://balau82.wordpress.com/2015/01/18/nostalgia-trip-qbasic-game-programming/
 SUB Delay_Framerate
@@ -451,18 +451,18 @@ FUNCTION y_component (angle, vel)
 END FUNCTION
 
 ' Rectangle bounding box collision detection
-Function is_collision (x1, x2, y1, y2, xx1, xx2, yy1, yy2)
-    is_collision = Not (yy2 < y1 Or yy1 > y2 Or xx2 < x1 Or xx1 > x2)
-End Function
+FUNCTION is_collision (x1, x2, y1, y2, xx1, xx2, yy1, yy2)
+    is_collision = NOT (yy2 < y1 OR yy1 > y2 OR xx2 < x1 OR xx1 > x2)
+END FUNCTION
 
-Function min (a, b)
+FUNCTION min (a, b)
     smallest = -1
-    If a < b Then smallest = a Else smallest = b
+    IF a < b THEN smallest = a ELSE smallest = b
     min = smallest
-End Function
+END FUNCTION
 
-Function max (a, b)
+FUNCTION max (a, b)
     biggest = -1
-    If a > b Then biggest = a Else biggest = b
+    IF a > b THEN biggest = a ELSE biggest = b
     max = biggest
-End Function
+END FUNCTION
