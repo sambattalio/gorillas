@@ -1,11 +1,11 @@
 ' Monkey Type Game
 
 ' Setup Screen and graphics
-Screen 13: Cls
-Cls: Paint (160, 100), 100
+SCREEN 13: CLS
+CLS: PAINT (160, 100), 100
 
-Const x_max = 320
-Const y_max = 200
+CONST x_max = 320
+CONST y_max = 200
 
 Const y_grav = 1
 Const MAX_HITBOXES = 420
@@ -92,54 +92,95 @@ velocity = 0
 angle = 0
 
 ' Creating standin banana sprite in program (we can load in sprites in future)
-Cls
+CLS
 'attempting to put in background
-
 
 ' Monke sprite
 '$INCLUDE: 'GORILLA.QBD'
 
 GORILLAW = 32 'Sprite width
 GORILLAH = 32 'Sprite height
-For Y = 1 To GORILLAH ' For each row; image height
-    For X = 1 To GORILLAW ' For each column; image width
-        Read DotColor
-        If DotColor <> 15 Then 'We can then use this IF-THEN statement to
-            PSet (X, Y), DotColor 'make COLOR 00 as a transparent color.
-        End If
-    Next X:
-Next Y
+FOR Y = 1 TO GORILLAH ' For each row; image height
+    FOR X = 1 TO GORILLAW ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X:
+NEXT Y
 
-Dim monkey%(GORILLAW * GORILLAH)
-Get (1, 1)-(GORILLAW, GORILLAH), monkey%()
-Cls
+DIM monkey%(GORILLAW * GORILLAH)
+GET (1, 1)-(GORILLAW, GORILLAH), monkey%()
+CLS
 
 '$INCLUDE: 'BANANA.QBD'
 BANANAW = 8
 BANANAH = 8
-Cls
-For Y = 1 To BANANAW ' For each row; image height
-    For X = 1 To BANANAH ' For each column; image width
-        Read DotColor
-        If DotColor <> 15 Then 'We can then use this IF-THEN statement to
-            PSet (X, Y), DotColor 'make COLOR 00 as a transparent color.
-        End If
-    Next X
-Next Y
+CLS
+FOR Y = 1 TO BANANAW ' For each row; image height
+    FOR X = 1 TO BANANAH ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X
+NEXT Y
 
-Dim banana%(BANANAH * BANANAW)
-Get (1, 1)-(BANANAW, BANANAH), banana%()
+DIM banana%(135)
+GET (1, 1)-(BANANAW, BANANAH), banana%()
 
-Cls
+'$INCLUDE: 'BANANA_9.QBD'
+CLS
+FOR Y = 1 TO BANANAW ' For each row; image height
+    FOR X = 1 TO BANANAH ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X
+NEXT Y
+
+GET (1, 1)-(BANANAW, BANANAH), banana%(34)
+CLS
+
+'$INCLUDE: 'BANANA_1.QBD'
+CLS
+FOR Y = 1 TO BANANAW ' For each row; image height
+    FOR X = 1 TO BANANAH ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X
+NEXT Y
+
+GET (1, 1)-(BANANAW, BANANAH), banana%(68)
+CLS
+
+'$INCLUDE: 'BANANA_2.QBD'
+CLS
+FOR Y = 1 TO BANANAW ' For each row; image height
+    FOR X = 1 TO BANANAH ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X
+NEXT Y
+
+GET (1, 1)-(BANANAW, BANANAH), banana%(102)
+CLS
+
+
 '$INCLUDE: 'BACKGROU.QBD'
-For Y = 1 To 200 ' For each row; image height
-    For X = 1 To 320 ' For each column; image width
-        Read DotColor
-        If DotColor <> 15 Then 'We can then use this IF-THEN statement to
-            PSet (X, Y), DotColor 'make COLOR 00 as a transparent color.
-        End If
-    Next X
-Next Y
+FOR Y = 1 TO 200 ' For each row; image height
+    FOR X = 1 TO 320 ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X
+NEXT Y
 
 
 ' test banana
@@ -155,8 +196,8 @@ rilla1_y = 62
 rilla2_x = 225
 rilla2_y = 90
 
-Put (rilla1_x, rilla1_y), monkey%()
-Put (rilla2_x, rilla2_y), monkey%()
+PUT (rilla1_x, rilla1_y), monkey%()
+PUT (rilla2_x, rilla2_y), monkey%()
 
 shooter = -1 ' -1 is true for some reason
 player1_score = 0
@@ -172,17 +213,25 @@ Do:
 
 
     angle = angle * 3.14159 / 180
-    GoSub Launch_Banana
-    shooter = Not shooter
-Loop While InKey$ <> "q"
+    GOSUB Launch_Banana
+    shooter = NOT shooter
 
+    'Monkey dance
+
+    IF player1_score = 3 THEN
+        GOSUB Monkey_Dance
+    ELSEIF player2_score = 1 THEN
+        GOSUB Monkey_Dance
+    END IF
+
+LOOP WHILE INKEY$ <> "q"
 
 ' LAUNCH SUBROUTINE
 Launch_Banana:
 old_x = 80
-If shooter Then old_x = rilla1_x Else old_x = rilla2_x
+IF shooter THEN old_x = rilla1_x ELSE old_x = rilla2_x
 old_y = 100
-If shooter Then old_y = rilla1_y Else old_y = rilla2_y
+IF shooter THEN old_y = rilla1_y ELSE old_y = rilla2_y
 X = old_x
 Y = old_y
 multiplier = 1
@@ -198,11 +247,17 @@ End If
 dy = y_component(multiplier * (angle + addition), velocity)
 dx = x_component(multiplier * (angle + addition), velocity)
 
-Put (old_x, old_y), banana%(), Xor
+PUT (old_x, old_y), banana%(), XOR
+PUT (old_x, old_y), banana%(34), XOR
+PUT (old_x, old_y), banana%(68), XOR
+PUT (old_x, old_y), banana%(102), XOR
 
-Do
+DO
     ' clear  old banana
-    Put (old_x, old_y), banana%(), Xor
+    PUT (old_x, old_y), banana%(), XOR
+    PUT (old_x, old_y), banana%(34), XOR
+    PUT (old_x, old_y), banana%(68), XOR
+    PUT (old_x, old_y), banana%(102), XOR
 
     X = X + dx + wind
     Y = Y + dy
@@ -212,23 +267,22 @@ Do
 
     dy = dy + y_grav
 
-
-    If X + 4 + 2 > x_max Or X < 0 Or Y + 4 + 2 > y_max Or Y < 0 Then Exit Do
-    ' new banan
-    Put (X, Y), banana%(), Xor
+    IF X + 4 + 2 > x_max OR X < 0 OR Y + 4 + 2 > y_max OR Y < 0 THEN EXIT DO
+    ' new banana
+    FOR spritenum% = 0 TO 3
+        Delay_Framerate
+        PUT (X, Y), banana%(spritenum% * 34), XOR
+    NEXT spritenum%
 
     ' Check collision (with non shooting gorilla)
     rilla_x = 0
-    If shooter Then rilla_x = rilla2_x Else rilla_x = rilla1_x
-    If shooter Then rilla_y = rilla2_y Else rilla_y = rilla1_y
+    IF shooter THEN rilla_x = rilla2_x ELSE rilla_x = rilla1_x
+    IF shooter THEN rilla_y = rilla2_y ELSE rilla_y = rilla1_y
     ' Check if it hit the opposing player and if so update the score accordingly
-    If is_collision(X, X + BANANAW, Y, Y + BANANAH, rilla_x, rilla_x + rilla_w, rilla_y, rilla_y + rilla_h) Then
-        If shooter Then player1_score = player1_score + 1 Else player2_score = player2_score + 1
-        Return
-    End If
-
-
-
+    IF is_collision(X, X + BANANAW, Y, Y + BANANAH, rilla_x, rilla_x + rilla_w, rilla_y, rilla_y + rilla_h) THEN
+        IF shooter THEN player1_score = player1_score + 1 ELSE player2_score = player2_score + 1
+        RETURN
+    END IF
 
 
     For I = 1 To num_hitboxes
@@ -251,9 +305,52 @@ Do
 
     ' delay a bit
     Delay_Framerate
-Loop While old_x + 4 < x_max And old_y + 4 < y_max And old_x > 0 And old_y > 0
+LOOP WHILE old_x + 4 < x_max AND old_y + 4 < y_max AND old_x > 0 AND old_y > 0
 
-Return
+RETURN
+
+Monkey_Dance:
+DIM monkey_dance%(4099)
+
+'Monke left
+'$INCLUDE: 'GORILLA_LEFT.QBD'
+
+FOR Y = 1 TO GORILLAH ' For each row; image height
+    FOR X = 1 TO GORILLAW ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X:
+NEXT Y
+
+GET (1, 1)-(GORILLAW, GORILLAH), monkey_dance%()
+CLS
+
+'Monke right
+'$INCLUDE: 'GORILLA_RIGHT.QBD'
+
+FOR Y = 1 TO GORILLAH ' For each row; image height
+    FOR X = 1 TO GORILLAW ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X:
+NEXT Y
+
+GET (1, 1)-(GORILLAW, GORILLAH), monkey_dance%(2050)
+CLS
+
+DO:
+    FOR spritenum% = 0 TO 1
+        Delay_Framerate
+        PUT (100, 100), monkey_dance%(spritenum% * 2050), PSET
+        Delay_Framerate
+    NEXT spritenum%
+LOOP WHILE INKEY$ <> "q"
+SYSTEM 1
+RETURN
 
 Function explode_hitboxes (hitbox_array() As hitbox_bounds, building_i, banana_hitbox As hitbox_bounds, num_hitboxes)
     ' Case 1, on left edge of building
@@ -333,25 +430,25 @@ Function explode_hitboxes (hitbox_array() As hitbox_bounds, building_i, banana_h
 End Function
 
 ' shamelessly from https://balau82.wordpress.com/2015/01/18/nostalgia-trip-qbasic-game-programming/
-Sub Delay_Framerate
-    Static lasttimer As Single 'The value is retained between calls.
-    Dim nexttimer As Single
-    Dim maxfps As Single
-    maxfps = 20
+SUB Delay_Framerate
+    STATIC lasttimer AS SINGLE 'The value is retained between calls.
+    DIM nexttimer AS SINGLE
+    DIM maxfps AS SINGLE
+    maxfps = 10
     nexttimer = lasttimer + 1! / maxfps
-    Do While Timer < nexttimer
-    Loop
-    lasttimer = Timer
-End Sub
+    DO WHILE TIMER < nexttimer
+    LOOP
+    lasttimer = TIMER
+END SUB
 
 ' Helper functions
-Function x_component (angle, vel)
-    x_component = Cos(angle) * vel
-End Function
+FUNCTION x_component (angle, vel)
+    x_component = COS(angle) * vel
+END FUNCTION
 
-Function y_component (angle, vel)
-    y_component = Sin(angle) * vel
-End Function
+FUNCTION y_component (angle, vel)
+    y_component = SIN(angle) * vel
+END FUNCTION
 
 ' Rectangle bounding box collision detection
 Function is_collision (x1, x2, y1, y2, xx1, xx2, yy1, yy2)
