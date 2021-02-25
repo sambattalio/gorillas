@@ -19,7 +19,6 @@ angle = 0
 CLS
 'attempting to put in background
 
-
 ' Monke sprite
 '$INCLUDE: 'GORILLA.QBD'
 
@@ -109,6 +108,15 @@ DO:
     angle = angle * 3.14159 / 180
     GOSUB Launch_Banana
     shooter = NOT shooter
+
+    'Monkey dance
+
+    IF player1_score = 3 THEN
+        GOSUB Monkey_Dance
+    ELSEIF player2_score = 1 THEN
+        GOSUB Monkey_Dance
+    END IF
+
 LOOP WHILE INKEY$ <> "q"
 
 
@@ -126,12 +134,14 @@ IF shooter THEN multiplier = 0 ELSE multiplier = 3.14159
 dy = y_component(angle + multiplier, velocity)
 dx = x_component(angle + multiplier, velocity)
 
-PUT (old_x, old_y), rotated_banana%(), XOR
 PUT (old_x, old_y), banana%(), XOR
+PUT (old_x, old_y), rotated_banana%(), XOR
+
 DO
     ' clear  old banana
     PUT (old_x, old_y), banana%(), XOR
     PUT (old_x, old_y), rotated_banana%(), XOR
+
     X = X + dx
     Y = Y + dy
 
@@ -142,10 +152,10 @@ DO
 
 
     IF X + 4 + 2 > x_max OR X < 0 OR Y + 4 + 2 > y_max OR Y < 0 THEN EXIT DO
-    ' new banan
+    ' new banana
+    Delay_Framerate
     PUT (X, Y), banana%(), XOR
     Delay_Framerate
-    'PUT (old_x - dx, old_y - dy - y_grav), banana%(), XOR
     PUT (X, Y), rotated_banana%(), XOR
 
     ' Check collision (with non shooting gorilla)
@@ -210,6 +220,48 @@ DO
     Delay_Framerate
 LOOP WHILE old_x + 4 < x_max AND old_y + 4 < y_max AND old_x > 0 AND old_y > 0
 
+RETURN
+
+Monkey_Dance:
+DIM monkey_dance%(4099)
+
+'Monke left
+'$INCLUDE: 'GORILLA_LEFT.QBD'
+
+FOR Y = 1 TO GORILLAH ' For each row; image height
+    FOR X = 1 TO GORILLAW ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X:
+NEXT Y
+
+GET (1, 1)-(GORILLAW, GORILLAH), monkey_dance%()
+CLS
+
+'Monke right
+'$INCLUDE: 'GORILLA_RIGHT.QBD'
+
+FOR Y = 1 TO GORILLAH ' For each row; image height
+    FOR X = 1 TO GORILLAW ' For each column; image width
+        READ DotColor
+        IF DotColor <> 15 THEN 'We can then use this IF-THEN statement to
+            PSET (X, Y), DotColor 'make COLOR 00 as a transparent color.
+        END IF
+    NEXT X:
+NEXT Y
+
+GET (1, 1)-(GORILLAW, GORILLAH), monkey_dance%(2050)
+CLS
+
+DO:
+    FOR spritenum% = 0 TO 1
+        Delay_Framerate
+        PUT (100, 100), monkey_dance%(spritenum% * 2050), PSET
+        Delay_Framerate
+    NEXT spritenum%
+LOOP WHILE INKEY$ <> "q"
 RETURN
 
 ' shamelessly from https://balau82.wordpress.com/2015/01/18/nostalgia-trip-qbasic-game-programming/
